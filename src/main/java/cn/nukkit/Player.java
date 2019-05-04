@@ -613,7 +613,7 @@ public class Player extends EntityHuman implements CommandSender, InventoryHolde
         this.setLevel(this.server.getDefaultLevel());
         this.viewDistance = this.server.getViewDistance();
         this.chunkRadius = viewDistance;
-        //this.newPosition = new Vector3(0, 0, 0);
+        this.newPosition = new Vector3(0, 0, 0);
         this.boundingBox = new SimpleAxisAlignedBB(0, 0, 0, 0, 0, 0);
 
         this.uuid = null;
@@ -1531,8 +1531,8 @@ public class Player extends EntityHuman implements CommandSender, InventoryHolde
                     } else {
                         this.addMovement(this.x, this.y + this.getEyeHeight(), this.z, this.yaw, this.pitch, this.yaw);
                     }
-                    //Biome biome = Biome.biomes[level.getBiomeId(this.getFloorX(), this.getFloorZ())];
-                    //sendTip(biome.getName() + " (" + biome.doesOverhang() + " " + biome.getBaseHeight() + "-" + biome.getHeightVariation() + ")");
+                    Biome biome = Biome.biomes[level.getBiomeId(this.getFloorX(), this.getFloorZ())];
+                    sendTip(biome.getName() + " (" + biome.doesOverhang() + " " + biome.getBaseHeight() + "-" + biome.getHeightVariation() + ")");
                 } else {
                     this.blocksAround = blocksAround;
                     this.collisionBlocks = collidingBlocks;
@@ -1583,7 +1583,7 @@ public class Player extends EntityHuman implements CommandSender, InventoryHolde
 
             // We have to send slightly above otherwise the player will fall into the ground.
             this.sendPosition(from.add(0, 0.00001, 0), from.yaw, from.pitch, MovePlayerPacket.MODE_RESET);
-            //this.sendSettings();
+            this.sendSettings();
             this.forceMovement = new Vector3(from.x, from.y + 0.00001, from.z);
         } else {
             this.forceMovement = null;
@@ -2587,7 +2587,7 @@ public class Player extends EntityHuman implements CommandSender, InventoryHolde
                     }
 
                     this.craftingType = CRAFTING_SMALL;
-                    //this.resetCraftingGridType();
+                    this.resetCraftingGridType();
 
                     InteractPacket interactPacket = (InteractPacket) packet;
 
@@ -2687,7 +2687,7 @@ public class Player extends EntityHuman implements CommandSender, InventoryHolde
                         break;
                     }
                     this.craftingType = CRAFTING_SMALL;
-                    //this.resetCraftingGridType();
+                    this.resetCraftingGridType();
 
                     EntityEventPacket entityEventPacket = (EntityEventPacket) packet;
 
@@ -3978,15 +3978,15 @@ public class Player extends EntityHuman implements CommandSender, InventoryHolde
                 && source.getCause() != DamageCause.SUICIDE
                 && source.getCause() != DamageCause.VOID
                 ) {
-            //source.setCancelled();
+            source.setCancelled();
             return false;
         } else if (this.getAdventureSettings().get(Type.ALLOW_FLIGHT) && source.getCause() == DamageCause.FALL) {
-            //source.setCancelled();
+            source.setCancelled();
             return false;
         } else if (source.getCause() == DamageCause.FALL) {
             if (this.getLevel().getBlock(this.getPosition().floor().add(0.5, -1, 0.5)).getId() == Block.SLIME_BLOCK) {
                 if (!this.isSneaking()) {
-                    //source.setCancelled();
+                    source.setCancelled();
                     this.resetFallDistance();
                     return false;
                 }
@@ -4083,13 +4083,13 @@ public class Player extends EntityHuman implements CommandSender, InventoryHolde
                 Map<Integer, Player> newChunk = this.level.getChunkPlayers((int) this.x >> 4, (int) this.z >> 4);
                 newChunk.remove(this.getLoaderId());
 
-                //List<Player> reload = new ArrayList<>();
+                List<Player> reload = new ArrayList<>();
                 for (Player player : new ArrayList<>(this.hasSpawned.values())) {
                     if (!newChunk.containsKey(player.getLoaderId())) {
                         this.despawnFrom(player);
                     } else {
                         newChunk.remove(player.getLoaderId());
-                        //reload.add(player);
+                        reload.add(player);
                     }
                 }
 
