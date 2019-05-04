@@ -1030,12 +1030,12 @@ public class Server {
 
     private void checkTickUpdates(int currentTick, long tickTime) {
         for (Player p : new ArrayList<>(this.players.values())) {
-            /*if (!p.loggedIn && (tickTime - p.creationTime) >= 10000 && p.kick(PlayerKickEvent.Reason.LOGIN_TIMEOUT, "Login timeout")) {
+            if (!p.loggedIn && (tickTime - p.creationTime) >= 10000 && p.kick(PlayerKickEvent.Reason.LOGIN_TIMEOUT, "Login timeout")) {
                 continue;
             }
 
             client freezes when applying resource packs
-            todo: fix*/
+            todo: fix
 
             if (this.alwaysTickPlayers) {
                 p.onUpdate(currentTick);
@@ -1174,10 +1174,10 @@ public class Server {
         }
 
         Timings.fullServerTickTimer.stopTiming();
-        //long now = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         long nowNano = System.nanoTime();
-        //float tick = Math.min(20, 1000 / Math.max(1, now - tickTime));
-        //float use = Math.min(1, (now - tickTime) / 50);
+        float tick = Math.min(20, 1000 / Math.max(1, now - tickTime));
+        float use = Math.min(1, (now - tickTime) / 50);
 
         float tick = (float) Math.min(20, 1000000000 / Math.max(1000000, ((double) nowNano - tickTimeNano)));
         float use = (float) Math.min(1, ((double) (nowNano - tickTimeNano)) / 50000000);
@@ -1950,7 +1950,7 @@ public class Server {
 
         this.getPluginManager().callEvent(new LevelLoadEvent(level));
 
-        /*this.getLogger().notice(this.getLanguage().translateString("nukkit.level.backgroundGeneration", name));
+        this.getLogger().notice(this.getLanguage().translateString("nukkit.level.backgroundGeneration", name));
 
         int centerX = (int) level.getSpawnLocation().getX() >> 4;
         int centerZ = (int) level.getSpawnLocation().getZ() >> 4;
@@ -1978,7 +1978,7 @@ public class Server {
         for (String index : order.keySet()) {
             Chunk.Entry entry = Level.getChunkXZ(index);
             level.populateChunk(entry.chunkX, entry.chunkZ, true);
-        }*/
+        }
         return true;
     }
 
