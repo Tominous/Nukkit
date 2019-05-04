@@ -26,12 +26,12 @@ public class Config {
     public static final int CNF = Config.PROPERTIES; // .cnf
     public static final int JSON = 1; // .js, .json
     public static final int YAML = 2; // .yml, .yaml
-    //public static final int EXPORT = 3; // .export, .xport
-    //public static final int SERIALIZED = 4; // .sl
+    public static final int EXPORT = 3; // .export, .xport
+    public static final int SERIALIZED = 4; // .sl
     public static final int ENUM = 5; // .txt, .list, .enum
     public static final int ENUMERATION = Config.ENUM;
 
-    //private LinkedHashMap<String, Object> config = new LinkedHashMap<>();
+    private LinkedHashMap<String, Object> config = new LinkedHashMap<>();
     private ConfigSection config = new ConfigSection();
     private File file;
     private boolean correct = false;
@@ -48,8 +48,8 @@ public class Config {
         format.put("json", Config.JSON);
         format.put("yml", Config.YAML);
         format.put("yaml", Config.YAML);
-        //format.put("sl", Config.SERIALIZED);
-        //format.put("serialize", Config.SERIALIZED);
+        format.put("sl", Config.SERIALIZED);
+        format.put("serialize", Config.SERIALIZED);
         format.put("txt", Config.ENUM);
         format.put("list", Config.ENUM);
         format.put("enum", Config.ENUM);
@@ -110,7 +110,7 @@ public class Config {
     public void reload() {
         this.config.clear();
         this.correct = false;
-        //this.load(this.file.toString());
+        this.load(this.file.toString());
         if (this.file == null) throw new IllegalStateException("Failed to reload Config. File object is undefined.");
         this.load(this.file.toString(), this.type);
 
@@ -550,7 +550,7 @@ public class Config {
                 Yaml yaml = new Yaml(dumperOptions);
                 this.config = new ConfigSection(yaml.loadAs(content, LinkedHashMap.class));
                 break;
-            // case Config.SERIALIZED
+             case Config.SERIALIZED
             case Config.ENUM:
                 this.parseList(content);
                 break;
